@@ -1,0 +1,25 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    [SerializeField] private Transform _vialGun;
+    [SerializeField] private Transform _firePoint;
+
+    [SerializeField] private Projectile _projectile;
+
+    [SerializeField] private float _offset;
+
+    private void Update()
+    {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        float newAngle = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg) - _offset;
+        _vialGun.localEulerAngles = new Vector3(0, 0, newAngle);
+
+        if (Input.GetMouseButtonDown(0)) Shoot();
+    }
+
+    private void Shoot()
+    {
+        Instantiate(_projectile, _firePoint.position, _vialGun.rotation);
+    }
+}
