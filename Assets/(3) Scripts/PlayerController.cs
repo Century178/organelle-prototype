@@ -2,24 +2,41 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Transform _vialGun;
-    [SerializeField] private Transform _firePoint;
+    public static PlayerController Instance { get; private set; }
 
-    [SerializeField] private Projectile _projectile;
+    [SerializeField] private float _launchForce;
+    [SerializeField] private Transform _groundCheck;
+    [SerializeField] private Vector2 _groundCheckSize;
+    [SerializeField] private LayerMask _groundCheckLayer;
+    private bool _isGrounded;
 
-    [SerializeField] private float _offset;
+    private Rigidbody2D _rb2D;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        _rb2D = GetComponent<Rigidbody2D>();
+    }
 
     private void Update()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        float newAngle = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg) - _offset;
-        _vialGun.localEulerAngles = new Vector3(0, 0, newAngle);
-
-        if (Input.GetMouseButtonDown(0)) Shoot();
+        if (_isGrounded && Input.GetMouseButtonDown(0)) Launch();
     }
 
-    private void Shoot()
+    private void FixedUpdate()
     {
-        Instantiate(_projectile, _firePoint.position, _vialGun.rotation);
+        _isGrounded = Physics2D.OverlapBox(_groundCheck.position, _groundCheckSize, 0, _groundCheckLayer);
+    }
+
+    private void Launch()
+    {
+
     }
 }

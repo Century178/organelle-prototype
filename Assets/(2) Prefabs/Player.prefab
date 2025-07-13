@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1951382442771861204}
+  - component: {fileID: 9093105545725541635}
   - component: {fileID: 6370074564282901024}
+  - component: {fileID: 1413872927599813509}
   - component: {fileID: 5971974349642267873}
   - component: {fileID: 6216208531902157875}
   - component: {fileID: 5100345833139548495}
@@ -36,6 +38,24 @@ Transform:
   - {fileID: 8291944571428132803}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9093105545725541635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683398503366431326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791ab9a30cc6e6f438654d61189e2240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _launchForce: 0
+  _groundCheck: {fileID: 0}
+  _groundCheckSize: {x: 0, y: 0}
+  _groundCheckLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &6370074564282901024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,6 +72,18 @@ MonoBehaviour:
   _firePoint: {fileID: 2244400205123363384}
   _projectile: {fileID: 7244116794734197284, guid: f4a9906106579884db9a22c25218dbda, type: 3}
   _offset: 90
+--- !u!114 &1413872927599813509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683398503366431326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5532a7220776fb74ea80bb2be1e90180, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &5971974349642267873
 SpriteRenderer:
   m_ObjectHideFlags: 0
