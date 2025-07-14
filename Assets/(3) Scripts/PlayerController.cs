@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (_isGrounded && Input.GetMouseButtonDown(0)) Launch();
+
+        if (Input.GetKeyDown(KeyCode.R)) PlayerHealth.Instance.Die();
+
+        if (Input.GetKeyDown(KeyCode.Escape)) SceneManager.LoadScene(0);
     }
 
     private void FixedUpdate()
@@ -37,6 +42,8 @@ public class PlayerController : MonoBehaviour
 
     private void Launch()
     {
-
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 diff = mousePos - (Vector2)transform.position;
+        _rb2D.AddForce(diff * _launchForce);
     }
 }

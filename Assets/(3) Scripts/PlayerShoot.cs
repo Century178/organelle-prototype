@@ -7,7 +7,8 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private Transform _vialGun;
     [SerializeField] private Transform _firePoint;
 
-    [SerializeField] private Projectile _projectile;
+    [SerializeField] private Projectile _vial1, _vial2;
+    private Projectile _currentVial;
 
     [SerializeField] private float _offset;
 
@@ -20,6 +21,8 @@ public class PlayerShoot : MonoBehaviour
         }
 
         Instance = this;
+
+        _currentVial = _vial1;
     }
 
     private void Update()
@@ -29,10 +32,18 @@ public class PlayerShoot : MonoBehaviour
         _vialGun.localEulerAngles = new Vector3(0, 0, newAngle);
 
         if (Input.GetMouseButtonDown(1)) Shoot();
+
+        if (Input.GetKeyDown(KeyCode.Space)) SwapVial();
     }
 
     private void Shoot()
     {
-        Instantiate(_projectile, _firePoint.position, _vialGun.rotation);
+        Instantiate(_currentVial, _firePoint.position, _vialGun.rotation);
+    }
+
+    private void SwapVial()
+    {
+        if (_currentVial == _vial1) _currentVial = _vial2;
+        else _currentVial = _vial1;
     }
 }

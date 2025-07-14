@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -8,10 +8,6 @@ public class PlayerHealth : MonoBehaviour
     private Vector2 _spawnPos;
 
     private float _spawnInvulnTime;
-
-    [SerializeField] private AudioClip _deathSound;
-
-    private AudioSource _aud;
 
     private void Awake()
     {
@@ -23,8 +19,6 @@ public class PlayerHealth : MonoBehaviour
 
         Instance = this;
 
-        _aud = GetComponent<AudioSource>();
-
         _spawnPos = transform.position;
     }
 
@@ -33,13 +27,24 @@ public class PlayerHealth : MonoBehaviour
         _spawnInvulnTime -= Time.deltaTime;
     }
 
+    private void FixedUpdate()
+    {
+        if (transform.position.y < -10) Die();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Respawn")) Checkpoint(collision.transform.position);
+
+        if (collision.gameObject.CompareTag("Finish")) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
     public void Die()
     {
         if (_spawnInvulnTime > 0) return;
 
         transform.position = _spawnPos;
-        _aud.PlayOneShot(_deathSound);
-        _spawnInvulnTime = 1f;
+        _spawnInvulnTime = 1f; //Prevents being instantly killed again if you get unlucky.
     }
 
     public void Checkpoint(Vector2 pos)
