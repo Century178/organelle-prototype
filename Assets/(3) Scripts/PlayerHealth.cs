@@ -32,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
         if (transform.position.y < -10) Die();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Respawn")) Checkpoint(collision.transform.position);
 
@@ -44,6 +44,7 @@ public class PlayerHealth : MonoBehaviour
         if (_spawnInvulnTime > 0) return;
 
         transform.position = _spawnPos;
+        GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         _spawnInvulnTime = 1f; //Prevents being instantly killed again if you get unlucky.
     }
 

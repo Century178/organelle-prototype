@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -7,10 +8,14 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private Transform _vialGun;
     [SerializeField] private Transform _firePoint;
 
-    [SerializeField] private Projectile _vial1, _vial2;
+    [SerializeField] private Projectile _plantVial, _lightVial;
+    [SerializeField] private int _plantVialCount, _lightVialCount;
     private Projectile _currentVial;
 
-    [SerializeField] private float _offset;
+    [SerializeField] private TextMeshProUGUI _plantVialCountText, _lightVialCountText;
+
+    [SerializeField] private float _angleOffset;
+    [SerializeField] private Vector2 _posOffset;
 
     private void Awake()
     {
@@ -21,14 +26,25 @@ public class PlayerShoot : MonoBehaviour
         }
 
         Instance = this;
+    }
 
-        _currentVial = _vial1;
+    private void Start()
+    {
+        //Initialize vial count UI.
+        PlantVialCount(0);
+        LightVialCount(0);
+
+        _currentVial = _plantVial;
+
+        _plantVialCountText.fontStyle = FontStyles.Italic;
+        _lightVialCountText.fontStyle = FontStyles.Normal;
     }
 
     private void Update()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        float newAngle = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg) - _offset;
+        Vector2 rawPos = mousePos - (Vector2)transform.position + _posOffset;
+        float newAngle = (Mathf.Atan2(rawPos.y, rawPos.x) * Mathf.Rad2Deg) - _angleOffset;
         _vialGun.localEulerAngles = new Vector3(0, 0, newAngle);
 
         if (Input.GetMouseButtonDown(1)) Shoot();
@@ -38,12 +54,45 @@ public class PlayerShoot : MonoBehaviour
 
     private void Shoot()
     {
-        Instantiate(_currentVial, _firePoint.position, _vialGun.rotation);
+        if (_currentVial == _plantVial && _plantVialCount > 0)
+        {
+            Instantiate(_currentVial, _firePoint.position, _vialGun.rotation);
+            PlantVialCount(-1);
+        }
+        else if (_currentVial == _lightVial && _lightVialCount > 0)
+        {
+            Instantiate(_currentVial, _firePoint.position, _vialGun.rotation);
+            LightVialCount(-1);
+        }
     }
 
     private void SwapVial()
     {
-        if (_currentVial == _vial1) _currentVial = _vial2;
-        else _currentVial = _vial1;
+        if (_currentVial == _plantVial)
+        {
+            _currentVial = _lightVial;
+
+            _plantVialCountText.fontStyle = FontStyles.Normal;
+            _lightVialCountText.fontStyle = FontStyles.Italic;
+        }
+        else if (_currentVial == _lightVial)
+        {
+            _currentVial = _plantVial;
+
+            _plantVialCountText.fontStyle = FontStyles.Italic;
+            _lightVialCountText.fontStyle = FontStyles.Normal;
+        }
+    }
+
+    public void PlantVialCount(int count)
+    {
+        _plantVialCount += count;
+        _plantVialCountText.text = "Plant Vials: " + _plantVialCount;
+    }
+
+    public void LightVialCount(int count)
+    {
+        _lightVialCount += count;
+        _lightVialCountText.text = "Light Vials: " + _lightVialCount;
     }
 }
